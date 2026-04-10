@@ -1,4 +1,4 @@
-package com.restocontrol.restcontrol_api.exceptions;
+package com.restocontrol.restcontrol_api.infra.exceptions;
 
 public class EmailJaCadastradoException extends RuntimeException {
     public EmailJaCadastradoException() {
