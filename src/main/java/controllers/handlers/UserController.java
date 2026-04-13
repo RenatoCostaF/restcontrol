@@ -17,10 +17,10 @@ public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @GetMapping
-    public ResponseEntity<List<User>> findUserByName(
+    public ResponseEntity<List<User>> findByName(
             @PathVariable("name") String name
     ){
-        logger.info("/user"+name);
+        logger.info("/user/"+name);
         return ResponseEntity.ok(user);
     }
 
@@ -35,6 +35,10 @@ public class UserController {
 
     @PutMapping
     public ResponseEntity<Void> changePassword(){
+
+    }
+
+    public ResponseEntity<Void> deleteUser(){
 
     }
 
