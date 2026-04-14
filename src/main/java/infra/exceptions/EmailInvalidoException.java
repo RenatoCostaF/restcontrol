@@ -1,4 +1,4 @@
-package com.restocontrol.restcontrol_api.infra.exceptions;
+package infra.exceptions;
 
 public class EmailInvalidoException extends RuntimeException {
     public EmailInvalidoException() {

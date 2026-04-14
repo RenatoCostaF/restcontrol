@@ -32,7 +32,7 @@ public class UserRepositoryImp implements UserRepository {
                 .param("login", user.getLogin())
                 .param("password", user.getPassword())
                 .param("address", user.getAddress())
-                .param("type", user.getType())
+                .param("type", user.getType());
     }
     Integer changePassword(Long id, String password); //Trocar senha
 

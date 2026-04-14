@@ -1,4 +1,4 @@
-package com.restocontrol.restcontrol_api.infra.exceptions;
+package infra.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
