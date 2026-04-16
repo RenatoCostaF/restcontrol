@@ -9,8 +9,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(EmailInvalidoException.class)
-    public ProblemDetail handleEmailInvalido(EmailInvalidoException e) {
+    @ExceptionHandler(InvalidEmailException.class)
+    public ProblemDetail handleInvalidEmail(InvalidEmailException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
         problemDetail.setTitle("Email Inválido Inserido");
         problemDetail.setDetail("O email informado não está dentro do padrão: nome@dominio");
@@ -18,16 +18,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return problemDetail;
     }
 
-    @ExceptionHandler(EmailJaCadastradoException.class)
-    public ProblemDetail handleEmailJaCadastrado(EmailJaCadastradoException e) {
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public ProblemDetail handleEmailAlreadyExists(EmailAlreadyExistsException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, e.getLocalizedMessage());
         problemDetail.setTitle("Email Já Cadastrado");
 
         return problemDetail;
     }
 
-    @ExceptionHandler(SenhaIncorretaException.class)
-    public ProblemDetail handleSenhaIncorretaException(SenhaIncorretaException e) {
+    @ExceptionHandler(IncorrectPasswordException.class)
+    public ProblemDetail handleIncorrectPassword(IncorrectPasswordException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.UNAUTHORIZED);
         problemDetail.setTitle("Senha Incorreta Informada");
         problemDetail.setDetail("A senha informada não condiz com a senha cadastrada para esse email");
@@ -35,8 +35,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return problemDetail;
     }
 
-    @ExceptionHandler(SenhaInvalidaException.class)
-    public ProblemDetail handleSenhaInvalidaException(SenhaInvalidaException e) {
+    @ExceptionHandler(InvalidPasswordException.class)
+    public ProblemDetail handleInvalidPassword(InvalidPasswordException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
         problemDetail.setTitle("Senha Inválida Informada");
         problemDetail.setDetail("A senha informada contém uma quantidade de caracteres abaixo do mínimo necessário (8)");
@@ -44,8 +44,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return problemDetail;
     }
 
-    @ExceptionHandler(UsuarioNaoEncontradoException.class)
-    public ProblemDetail handleUsuarioNaoEncontradoException(UsuarioNaoEncontradoException e) {
+    @ExceptionHandler(UserNotFoundException.class)
+    public ProblemDetail handleUserNotFound(UserNotFoundException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getLocalizedMessage());
         problemDetail.setTitle("Usuário Não Encontrado");
 

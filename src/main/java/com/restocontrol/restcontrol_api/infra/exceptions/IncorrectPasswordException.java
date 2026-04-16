@@ -1,7 +1,7 @@
 package com.restocontrol.restcontrol_api.infra.exceptions;
 
-public class SenhaIncorretaException extends RuntimeException {
-    public SenhaIncorretaException() {
+public class IncorrectPasswordException extends RuntimeException {
+    public IncorrectPasswordException() {
         super("A senha está incorreta");
     }
 }

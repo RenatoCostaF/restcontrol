@@ -1,4 +1,4 @@
-package com.restocontrol.restcontrol_api.handlers;
+package com.restocontrol.restcontrol_api.controllers.handlers;
 
 import com.restocontrol.restcontrol_api.DTOs.AuthenticationDTO;
 import com.restocontrol.restcontrol_api.DTOs.RegisterDTO;

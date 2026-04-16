@@ -1,4 +1,4 @@
-package br.com.fiap.tech_challege.tech_challenge.controllers;
+package com.restocontrol.restcontrol_api.controllers.handlers;
 
 import br.com.fiap.tech_challege.tech_challenge.entities.User;
 import br.com.fiap.tech_challege.tech_challenge.services.UserService;
@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
