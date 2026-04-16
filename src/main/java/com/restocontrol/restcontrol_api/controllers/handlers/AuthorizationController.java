@@ -1,8 +1,10 @@
 package com.restocontrol.restcontrol_api.controllers.handlers;
 
 import com.restocontrol.restcontrol_api.DTOs.AuthenticationDTO;
+import com.restocontrol.restcontrol_api.DTOs.LoginResponseDTO;
 import com.restocontrol.restcontrol_api.DTOs.RegisterDTO;
 import com.restocontrol.restcontrol_api.entities.User;
+import com.restocontrol.restcontrol_api.infra.security.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +28,9 @@ public class AuthorizationController {
     @PostMapping("/email")
     public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data){
 
-        service.login(data);
+        String token = service.login(data);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
     @PostMapping("/register")

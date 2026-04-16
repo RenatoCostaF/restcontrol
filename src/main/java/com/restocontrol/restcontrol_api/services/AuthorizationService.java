@@ -4,6 +4,7 @@ import com.restocontrol.restcontrol_api.DTOs.AuthenticationDTO;
 import com.restocontrol.restcontrol_api.DTOs.RegisterDTO;
 import com.restocontrol.restcontrol_api.entities.User;
 import com.restocontrol.restcontrol_api.infra.exceptions.EmailAlreadyExistsException;
+import com.restocontrol.restcontrol_api.infra.security.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,14 +27,19 @@ public class AuthorizationService implements UserDetailsService {
     @Autowired
     AuthenticationManager authenticationManager;
 
+    @Autowired
+    private TokenService tokenService;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return repository.findByEmail(username);
     }
 
-    public void login(AuthenticationDTO data) {
+    public String login(AuthenticationDTO data) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
-        authenticationManager.authenticate(usernamePassword);
+        var auth = authenticationManager.authenticate(usernamePassword);
+
+        return tokenService.generateToken((User) auth.getPrincipal());
     }
 
     public void register(RegisterDTO data) {
