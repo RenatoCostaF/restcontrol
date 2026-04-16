@@ -1,14 +1,14 @@
-package controllers.handlers;
+package com.restocontrol.restcontrol_api.handlers;
 
 /*
 import org.apache.catalina.User;
 */
-import entities.User;
+import com.restocontrol.restcontrol_api.entities.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import services.UserService;
+import com.restocontrol.restcontrol_api.services.UserService;
 
 import java.util.List;
 

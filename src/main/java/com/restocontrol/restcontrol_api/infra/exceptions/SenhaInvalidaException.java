@@ -1,4 +1,4 @@
-package infra.exceptions;
+package com.restocontrol.restcontrol_api.infra.exceptions;
 
 public class SenhaInvalidaException extends RuntimeException {
     public SenhaInvalidaException() {

@@ -1,9 +1,8 @@
-package repositories;
+package com.restocontrol.restcontrol_api.repositories;
 
-import entities.User;
+import com.restocontrol.restcontrol_api.entities.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository {

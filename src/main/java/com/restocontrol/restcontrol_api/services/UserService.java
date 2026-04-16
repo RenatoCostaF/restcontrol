@@ -1,8 +1,8 @@
-package services;
+package com.restocontrol.restcontrol_api.services;
 
-import entities.User;
+import com.restocontrol.restcontrol_api.entities.User;
 import org.springframework.stereotype.Service;
-import repositories.UserRepository;
+import com.restocontrol.restcontrol_api.repositories.UserRepository;
 
 import java.util.List;
 

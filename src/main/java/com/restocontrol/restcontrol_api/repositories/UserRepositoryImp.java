@@ -1,6 +1,6 @@
-package repositories;
+package com.restocontrol.restcontrol_api.repositories;
 
-import entities.User;
+import com.restocontrol.restcontrol_api.entities.User;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 

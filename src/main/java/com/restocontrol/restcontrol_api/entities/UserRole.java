@@ -1,4 +1,4 @@
-package entities;
+package com.restocontrol.restcontrol_api.entities;
 
 public enum UserRole {
     DONO_RESTAURANTE("dono_restaurante"),
