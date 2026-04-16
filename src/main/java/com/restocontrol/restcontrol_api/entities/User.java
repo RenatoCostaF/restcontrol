@@ -1,33 +1,38 @@
 package com.restocontrol.restcontrol_api.entities;
 
+import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
+@Table(name = "users")
 public class User implements UserDetails {
-    private Long id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
     private String name;
+
     private String email;
-    private String login;
+
     private String password;
-    private Date lastModifiedDate;
+    /*private Date lastModifiedDate;*/
     private String address;
+
     private UserRole role;
-
-    public User(String login, String password, UserRole role) {
-
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -40,6 +45,6 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return login;
+        return email;
     }
 }

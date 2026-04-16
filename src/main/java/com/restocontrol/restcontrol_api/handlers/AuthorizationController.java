@@ -1,7 +1,7 @@
 package com.restocontrol.restcontrol_api.handlers;
 
-import com.restocontrol.restcontrol_api.entities.AuthenticationDTO;
-import com.restocontrol.restcontrol_api.entities.RegisterDTO;
+import com.restocontrol.restcontrol_api.DTOs.AuthenticationDTO;
+import com.restocontrol.restcontrol_api.DTOs.RegisterDTO;
 import com.restocontrol.restcontrol_api.entities.User;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

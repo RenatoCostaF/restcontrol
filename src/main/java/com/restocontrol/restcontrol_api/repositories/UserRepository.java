@@ -1,16 +1,15 @@
 package com.restocontrol.restcontrol_api.repositories;
 
 import com.restocontrol.restcontrol_api.entities.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.util.UUID;
 
-public interface UserRepository {
-    Optional<User> findByName(String name);
-    /*List<User> findAll(int size, int offset);*/
-    UserDetails findByLogin(String login);
-    Integer save(User user); //Criar novo usuario
-    Integer changePassword(Long id, String password); //Trocar senha
-    Integer update(User user, Long id); //Atualizar demais informacoes
-    Integer delete(Long id);//Remove usuario existente
+@Repository
+public interface UserRepository extends JpaRepository<User, UUID> {
+    User findByName(String name);
+
+    UserDetails findByEmail(String email);
 }
