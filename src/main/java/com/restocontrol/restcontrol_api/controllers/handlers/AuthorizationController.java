@@ -21,18 +21,12 @@ import com.restocontrol.restcontrol_api.services.AuthorizationService;
 public class AuthorizationController {
 
     @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private UserRepository repository;
-
-    @Autowired
     private AuthorizationService service;
 
-    @PostMapping("/login")
+    @PostMapping("/email")
     public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data){
-        var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
-        var auth =this.authenticationManager.authenticate(usernamePassword);
+
+        service.login(data);
 
         return ResponseEntity.ok().build();
     }
@@ -40,11 +34,8 @@ public class AuthorizationController {
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Valid RegisterDTO data){
 
-        String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
-        User newUser = new User(data.login(), encryptedPassword, data.role());
+        service.register(data);
 
-        this.repository.save(newUser);
-
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(201).build();
     }
 }

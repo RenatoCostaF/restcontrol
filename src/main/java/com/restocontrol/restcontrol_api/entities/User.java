@@ -34,6 +34,9 @@ public class User implements UserDetails {
 
     private UserRole role;
 
+    public User(String email, String encryptedPassword, UserRole role) {
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (this.role == UserRole.DONO_RESTAURANTE) {
