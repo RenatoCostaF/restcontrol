@@ -1,20 +1,19 @@
-package controllers.handlers;
+package br.com.fiap.tech_challege.tech_challenge.controllers;
 
-/*
-import org.apache.catalina.User;
-*/
-import entities.User;
+import br.com.fiap.tech_challege.tech_challenge.entities.User;
+import br.com.fiap.tech_challege.tech_challenge.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import services.UserService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
+
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     private final UserService userService;
@@ -24,12 +23,25 @@ public class UserController {
     }
 
     @GetMapping("/{name}")
-    public ResponseEntity<List<User>> findByName(
+    public ResponseEntity<Optional<User>> findByName(
             @PathVariable("name") String name
     ){
-        logger.info("/user/"+name);
-        var sysUser = this.userService.findByName(name);
-        return ResponseEntity.ok(user);
+        /*logger.info("/users?name="+name);*/
+        logger.info("/users/name="+name);
+        var user = this.userService.findByName(name);
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping
+    public ResponseEntity<Void> createUser(
+            @RequestBody User user
+    ){
+        logger.info("POST -> /users");
+        this.userService.createUser(user);
+        return ResponseEntity.status(201).build();
     }
 
     @PutMapping("/{id}")
@@ -37,29 +49,8 @@ public class UserController {
             @PathVariable("id") Long id,
             @RequestBody User user
     ){
-        logger.info("PUT => /user"+id);
-        this.userService.updateUser(user,id);
+        logger.info("PUT -> /users/"+id);
+        this.userService.updateUser(user, id);
+        return ResponseEntity.ok().build();
     }
-
-    @PostMapping
-    public ResponseEntity<Void> createUser(
-            @RequestBody User user
-    ){
-        logger.info("POST => /user");
-        this.userService.saveUser(user);
-    }
-
-    @PutMapping
-    public ResponseEntity<Void> changePassword(){
-
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(
-            @PathVariable("id") Long id
-    ){
-        logger.info("DELETE => /user/"+id);
-        this.userService.deleteUser(id);
-    }
-
 }

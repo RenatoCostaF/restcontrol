@@ -1,15 +1,16 @@
-package repositories;
+package br.com.fiap.tech_challege.tech_challenge.repositories;
 
-import entities.User;
+import br.com.fiap.tech_challege.tech_challenge.entities.User;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository {
+
     Optional<User> findByName(String name);
     /*List<User> findAll(int size, int offset);*/
-    Integer save(User user); //Criar novo usuario
-    Integer changePassword(Long id, String password); //Trocar senha
-    Integer update(User user, Long id); //Atualizar demais informacoes
-    Integer delete(Long id);//Remove usuario existente
+    Integer createUser(User user); //Retorna a quantidade de linhas criadas
+    Integer updateUser(User user, Long id);
+    /*Integer deleteUser(Long id);*/
 }

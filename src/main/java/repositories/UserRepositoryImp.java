@@ -1,51 +1,65 @@
-package repositories;
+package br.com.fiap.tech_challege.tech_challenge.repositories;
 
-import entities.User;
+import br.com.fiap.tech_challege.tech_challenge.entities.User;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
-@Repository
-public class UserRepositoryImp implements UserRepository {
-    private final JdbcClient jdbcClient;
+@Repository //Indicar que a classe está apta para realizar a injeção de dependencias
+public class UserRepositoryImp implements br.com.fiap.tech_challege.tech_challenge.repositories.UserRepository {
 
-    public UserRepositoryImp(JdbcClient jdbcClient){
+    private final JdbcClient jdbcClient;
+    public UserRepositoryImp (JdbcClient jdbcClient){
         this.jdbcClient = jdbcClient;
     }
 
-    @Override
     public Optional<User> findByName(String name){
-        return this.jdbcClient
-                .sql("SELECT * FROM people WHERE Name = :name")
+        return this.jdbcClient.sql("SELECT * FROM users WHERE name = :name")
                 .param("name", name)
                 .query(User.class)
                 .optional();
     }
 
-    @Override
-    public Integer save(User user){
-        return jdbcClient
-                .sql("INSERT INTO users (name, email, login, password, address, type) VALUES (:name, :email, :login, :password, :address, :type)")
-                .param("name", user.getName())
-                .param("email", user.getEmail())
-                .param("login", user.getLogin())
-                .param("password", user.getPassword())
-                .param("address", user.getAddress())
-                .param("type", user.getType())
-    }
-    Integer changePassword(Long id, String password); //Trocar senha
+    /*@Override
+    public Optional<User> findByName(String name) {
+        return this.jdbcClient.sql("SELECT * FROM users WHERE name = :name")
+                .param("name", name)
+                .query(User.class)
+                .optional();
+    }*/
+
+    /*@Override
+    public List<User> findAll(int size, int offset) {
+        return List.of();
+    }*/
 
     @Override
-    public Integer update(User user, Long id){
-        return jdbcClient
-                .sql("UPDATE users SET name = :name, email = :email, login = :login, address = :address, type = :type")
+    public Integer createUser(User user) {
+        return this.jdbcClient
+                .sql("INSERT INTO users (name, email, address, type) VALUES (:name, :email, :address, :type)")
                 .param("name", user.getName())
                 .param("email", user.getEmail())
-                .param("login", user.getLogin())
                 .param("address", user.getAddress())
                 .param("type", user.getType())
                 .update();
     }
-    Integer delete(Long id);//Remove usuario existente
+
+    @Override
+    public Integer updateUser(User user, Long id) {
+        return this.jdbcClient
+                .sql("UPDATE users SET name = :name, email = :email, address = :address, type = :type")
+                .param("id",id)
+                .param("name", user.getName())
+                .param("email", user.getEmail())
+                .param("address", user.getAddress())
+                .param("type", user.getType())
+                .update();
+    }
+
+    /*@Override
+    public Integer deleteUser(Long id) {
+        return 0;
+    }*/
 }
