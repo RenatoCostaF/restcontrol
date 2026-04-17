@@ -3,10 +3,17 @@ package br.com.fiap.tech_challege.tech_challenge.services;
 import br.com.fiap.tech_challege.tech_challenge.entities.User;
 import br.com.fiap.tech_challege.tech_challenge.repositories.UserRepository;
 import org.springframework.stereotype.Service;
+package com.restocontrol.restcontrol_api.services;
+
+import com.restocontrol.restcontrol_api.entities.User;
+import com.restocontrol.restcontrol_api.repositories.UserRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -16,30 +23,22 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-
-    public Optional<User> findByName(String name){
+    public List<User> findByName(String name){
         return this.userRepository.findByName(name);
     }
-    /*public Optional<User> findByName(String name){
-        return this.userRepository.findByName(name);
-    }*/
 
+    @Transactional
     public void createUser(User user){
-        var save = this.userRepository.createUser(user);
-        Assert.state(save == 1, "Erro ao salvar usuario "+user.getName());
+        this.userRepository.save(user);
     }
 
-    public void updateUser(User user, Long id){
-        var update = this.userRepository.updateUser(user, id);
-        if(update == 0){
-            throw new RuntimeException("Usuario nao encontrado!");
-        }
+    @Transactional
+    public void updateUser(User user, UUID id){
+        user.setId(id);
+        this.userRepository.save(user);
     }
 
-    /*public void deleteUser(Long id){
-        var delete = this.userRepository.deleteUser(id);
-        if(delete == 0){
-            throw new RuntimeException("Nao foi possivel remover usuario "+id);
-        }
-    }*/
+    public void deleteUser(UUID id){
+        this.userRepository.deleteById(id);
+    }
 }
