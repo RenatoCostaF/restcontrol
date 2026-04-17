@@ -1,3 +1,8 @@
+package br.com.fiap.tech_challege.tech_challenge.services;
+
+import br.com.fiap.tech_challege.tech_challenge.entities.User;
+import br.com.fiap.tech_challege.tech_challenge.repositories.UserRepository;
+import org.springframework.stereotype.Service;
 package com.restocontrol.restcontrol_api.services;
 
 import com.restocontrol.restcontrol_api.entities.User;
@@ -17,7 +22,6 @@ public class UserService {
     public UserService(UserRepository userRepository){
         this.userRepository = userRepository;
     }
-
 
     public List<User> findByName(String name){
         return this.userRepository.findByName(name);
