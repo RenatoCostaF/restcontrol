@@ -2,8 +2,8 @@ package com.restocontrol.restcontrol_api.services;
 
 import com.restocontrol.restcontrol_api.dtos.CreateUserRequestDTO;
 import com.restocontrol.restcontrol_api.dtos.CreateUserResponseDTO;
+import com.restocontrol.restcontrol_api.dtos.GetUserByNameResponseDTO;
 import com.restocontrol.restcontrol_api.dtos.UpdateUserRequestDTO;
-import com.restocontrol.restcontrol_api.entities.User;
 import com.restocontrol.restcontrol_api.infra.exceptions.EmailAlreadyExistsException;
 import com.restocontrol.restcontrol_api.infra.exceptions.InvalidPasswordException;
 import com.restocontrol.restcontrol_api.infra.exceptions.LoginAlreadyExistsException;
@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,8 +30,9 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
-    public List<User> findByName(String name) {
-        return this.userRepository.findByName(name);
+    public List<GetUserByNameResponseDTO> findByName(String name) {
+        var users = this.userRepository.findByName(name);
+        return userMapper.toGetUserByNameResponseDTO(users);
     }
 
     @Transactional
@@ -43,7 +45,7 @@ public class UserService {
             throw new LoginAlreadyExistsException();
         }
 
-        if (userDto.password().length() <= 6) {
+        if (userDto.password().length() < 6) {
             throw new InvalidPasswordException("Password must be at least 6 characters long");
         }
 
@@ -82,6 +84,8 @@ public class UserService {
         if (userDto.address() != null) {
             user.setAddress(userDto.address());
         }
+
+        user.setUpdatedAt(LocalDateTime.now());
 
         this.userRepository.save(user);
 

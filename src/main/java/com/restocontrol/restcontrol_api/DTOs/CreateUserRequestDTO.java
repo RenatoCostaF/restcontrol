@@ -25,5 +25,5 @@ public record CreateUserRequestDTO(
         String address,
 
         @NotBlank(message = "Role is required")
-        UserRole role) {
+        String role) {
 }

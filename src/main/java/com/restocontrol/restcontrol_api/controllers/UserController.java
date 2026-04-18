@@ -2,6 +2,7 @@ package com.restocontrol.restcontrol_api.controllers;
 
 import com.restocontrol.restcontrol_api.dtos.CreateUserRequestDTO;
 import com.restocontrol.restcontrol_api.dtos.CreateUserResponseDTO;
+import com.restocontrol.restcontrol_api.dtos.GetUserByNameResponseDTO;
 import com.restocontrol.restcontrol_api.dtos.UpdateUserRequestDTO;
 import com.restocontrol.restcontrol_api.entities.User;
 import com.restocontrol.restcontrol_api.services.UserService;
@@ -22,18 +23,18 @@ public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService){
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
     @GetMapping("/{name}")
-    public ResponseEntity<List<User>> findByName(
+    public ResponseEntity<List<GetUserByNameResponseDTO>> findByName(
             @PathVariable("name") String name
-    ){
-        logger.info("GET -> /user"+name);
-        List<User> userList = this.userService.findByName(name);
-        if (userList.size() == 0) {
-            return ResponseEntity.ok(userList);
+    ) {
+        logger.info("GET -> /user" + name);
+        var users = this.userService.findByName(name);
+        if (users.size() > 0) {
+            return ResponseEntity.ok(users);
         }
         return ResponseEntity.notFound().build();
     }
@@ -41,18 +42,18 @@ public class UserController {
     @PostMapping
     public ResponseEntity<CreateUserResponseDTO> createUser(
             @Valid @RequestBody CreateUserRequestDTO user
-    ){
+    ) {
         logger.info("POST -> /users");
-        this.userService.createUser(user);
-        return ResponseEntity.status(201).build();
+        var response = this.userService.createUser(user);
+        return ResponseEntity.status(201).body(response);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateUser(
             @PathVariable("id") UUID id,
             @RequestBody UpdateUserRequestDTO userDto
-    ){
-        logger.info("PUT -> /users/"+id);
+    ) {
+        logger.info("PUT -> /users/" + id);
         this.userService.updateUser(userDto, id);
         return ResponseEntity.ok().build();
     }
@@ -60,8 +61,8 @@ public class UserController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(
             @PathVariable("id") UUID id
-    ){
-        logger.info("DELETE -> /users/"+id);
+    ) {
+        logger.info("DELETE -> /users/" + id);
         this.userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }

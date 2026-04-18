@@ -1,5 +1,6 @@
 package com.restocontrol.restcontrol_api.infra.security;
 
+import com.restocontrol.restcontrol_api.entities.UserRole;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -32,8 +33,8 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/user").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/user").hasRole("DONO_RESTAURANTE")
-                        .requestMatchers(HttpMethod.DELETE, "/user").hasRole("DONO_RESTAURANTE")
+                        .requestMatchers(HttpMethod.GET, "/user/{name}").hasRole("DONO_RESTAURANTE")
+                        .requestMatchers(HttpMethod.DELETE, "/user/{id}").hasRole("DONO_RESTAURANTE")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
