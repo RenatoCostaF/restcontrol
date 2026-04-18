@@ -1,18 +1,21 @@
-package controllers;
+package com.restocontrol.restcontrol_api.controllers;
 
+import com.restocontrol.restcontrol_api.dtos.CreateUserRequestDTO;
+import com.restocontrol.restcontrol_api.dtos.CreateUserResponseDTO;
+import com.restocontrol.restcontrol_api.dtos.UpdateUserRequestDTO;
 import com.restocontrol.restcontrol_api.entities.User;
 import com.restocontrol.restcontrol_api.services.UserService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/user")
 public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -27,8 +30,7 @@ public class UserController {
     public ResponseEntity<List<User>> findByName(
             @PathVariable("name") String name
     ){
-        /*logger.info("/users?name="+name);*/
-        logger.info("/users/name="+name);
+        logger.info("GET -> /user"+name);
         List<User> userList = this.userService.findByName(name);
         if (userList.size() == 0) {
             return ResponseEntity.ok(userList);
@@ -37,8 +39,8 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createUser(
-            @RequestBody User user
+    public ResponseEntity<CreateUserResponseDTO> createUser(
+            @Valid @RequestBody CreateUserRequestDTO user
     ){
         logger.info("POST -> /users");
         this.userService.createUser(user);
@@ -48,10 +50,19 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateUser(
             @PathVariable("id") UUID id,
-            @RequestBody User user
+            @RequestBody UpdateUserRequestDTO userDto
     ){
         logger.info("PUT -> /users/"+id);
-        this.userService.updateUser(user, id);
+        this.userService.updateUser(userDto, id);
         return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(
+            @PathVariable("id") UUID id
+    ){
+        logger.info("DELETE -> /users/"+id);
+        this.userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
 }
