@@ -1,6 +1,6 @@
 package com.restocontrol.restcontrol_api.services;
 
-import com.restocontrol.restcontrol_api.DTOs.ChangePasswordDTO;
+import com.restocontrol.restcontrol_api.dtos.ChangePasswordDTO;
 import com.restocontrol.restcontrol_api.dtos.CreateUserRequestDTO;
 import com.restocontrol.restcontrol_api.dtos.CreateUserResponseDTO;
 import com.restocontrol.restcontrol_api.dtos.GetUserByNameResponseDTO;

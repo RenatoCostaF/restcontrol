@@ -20,7 +20,7 @@ public class UserMapper {
         user.setEmail(userDto.email());
         user.setName(userDto.name());
         user.setAddress(userDto.address());
-        user.setRole(UserRole.valueOf(userDto.role()));
+        user.setRole(userDto.role());
 
         return user;
     }
@@ -41,7 +41,7 @@ public class UserMapper {
                         user.getName(),
                         user.getEmail(),
                         user.getAddress(),
-                        user.getRole().toString()
+                        user.getRole()
                 ))
                 .toList();
     }
