@@ -1,5 +1,6 @@
 package com.restocontrol.restcontrol_api.services;
 
+import com.restocontrol.restcontrol_api.DTOs.ChangePasswordDTO;
 import com.restocontrol.restcontrol_api.dtos.CreateUserRequestDTO;
 import com.restocontrol.restcontrol_api.dtos.CreateUserResponseDTO;
 import com.restocontrol.restcontrol_api.dtos.GetUserByNameResponseDTO;
@@ -97,5 +98,17 @@ public class UserService {
         }
 
         this.userRepository.deleteById(id);
+    }
+
+    public void changePassword(ChangePasswordDTO changePasswordDto, UUID id){
+        var user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+
+        if (changePasswordDto.password().length() < 6) {
+            throw new InvalidPasswordException("Password must be at least 6 characters long");
+        }
+
+        String encryptedPassword = passwordEncoder.encode(changePasswordDto.password());
+
+        this.userRepository.changePassword(id, encryptedPassword);
     }
 }
