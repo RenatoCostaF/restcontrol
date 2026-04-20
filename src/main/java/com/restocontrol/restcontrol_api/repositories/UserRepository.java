@@ -23,6 +23,5 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     @Transactional
     @Query("UPDATE User u SET u.password = :password WHERE u.id = :id")
     int updatePassword(UUID id, String password);
-    //User save (User user); -- for Id
-    //void delete (User user);
+    User save (User user);
 }
