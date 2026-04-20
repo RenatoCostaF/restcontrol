@@ -29,6 +29,27 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return problemDetail;
     }
 
+    @ExceptionHandler(LoginAlreadyExistsException.class)
+    public ProblemDetail handleLoginAlreadyExists(LoginAlreadyExistsException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
+                HttpStatus.CONFLICT,
+                e.getLocalizedMessage()
+        );
+        problemDetail.setTitle("Login Already Exists");
+
+        return problemDetail;
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ProblemDetail handleUserNotFound(UserNotFoundException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatus(
+                HttpStatus.BAD_REQUEST
+        );
+        problemDetail.setDetail("There is not any user with this id");
+
+        return problemDetail;
+    }
+
     @ExceptionHandler(IncorrectPasswordException.class)
     public ProblemDetail handleIncorrectPassword(IncorrectPasswordException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.UNAUTHORIZED);
@@ -42,7 +63,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ProblemDetail handleInvalidPassword(InvalidPasswordException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
         problemDetail.setTitle("Invalid Password");
-        problemDetail.setDetail("The password must contain at least 8 characters");
+        problemDetail.setDetail(e.getMessage());
 
         return problemDetail;
     }
