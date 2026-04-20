@@ -1,4 +1,4 @@
-package com.restocontrol.restcontrol_api.DTOs;
+package com.restocontrol.restcontrol_api.dtos;
 
 public record LoginResponseDTO(String token) {
 }
