@@ -43,9 +43,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
     public ProblemDetail handleUserNotFound(UserNotFoundException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatus(
-                HttpStatus.BAD_REQUEST
+                HttpStatus.NOT_FOUND
         );
-        problemDetail.setDetail("There is not any user with this id");
+        problemDetail.setDetail("There is no user with the given id.");
 
         return problemDetail;
     }
@@ -67,5 +67,44 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         return problemDetail;
     }
+
+    @ExceptionHandler(AuthenticationFailedException.class)
+    public ProblemDetail handleAthenticationFailed(AuthenticationFailedException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.UNAUTHORIZED);
+        problemDetail.setTitle("Authentication Failed");
+        problemDetail.setDetail(e.getMessage());
+
+        return problemDetail;
+    }
+
+    @ExceptionHandler(TokenGenerationException.class)
+    public ProblemDetail handleTokenGeneration(TokenGenerationException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+        problemDetail.setTitle("Token Generation Failed");
+        problemDetail.setDetail(e.getMessage());
+
+        return problemDetail;
+    }
+
+    @ExceptionHandler(InvalidOrExpiredTokenException.class)
+    public ProblemDetail handleInvalidOrExpiredToken(InvalidOrExpiredTokenException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+        problemDetail.setTitle("Invalid or Expired Token");
+        problemDetail.setDetail(e.getMessage());
+
+        return problemDetail;
+    }
+
+    @ExceptionHandler(UsersNotFoundByNameException.class)
+    public ProblemDetail handleUsersNotFoundByName(UsersNotFoundByNameException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.NOT_FOUND);
+        problemDetail.setTitle("Users Not Found");
+        problemDetail.setDetail("No users were found for requested name.");
+        problemDetail.setProperty("name", e.getSearchedName());
+
+        return problemDetail;
+    }
+
+
 
 }
