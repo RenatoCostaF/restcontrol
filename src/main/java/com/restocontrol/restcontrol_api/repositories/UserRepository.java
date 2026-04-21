@@ -22,9 +22,4 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     boolean existsByEmail(String email);
 
     boolean existsByLogin(String login);
-
-    @Modifying
-    @Transactional
-    @Query("UPDATE User u SET u.password = :password WHERE u.id = :id")
-    int changePassword(UUID id, String password);
 }

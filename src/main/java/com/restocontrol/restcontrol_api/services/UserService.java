@@ -109,6 +109,10 @@ public class UserService {
 
         String encryptedPassword = passwordEncoder.encode(changePasswordDto.password());
 
-        this.userRepository.changePassword(id, encryptedPassword);
+        user.setPassword(encryptedPassword);
+        user.setUpdatedAt(LocalDateTime.now());
+
+        this.userRepository.save(user);
+
     }
 }
