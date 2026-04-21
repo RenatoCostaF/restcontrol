@@ -1,5 +1,6 @@
 package com.restocontrol.restcontrol_api.controllers;
 
+import com.restocontrol.restcontrol_api.DTOs.ChangePasswordDTO;
 import com.restocontrol.restcontrol_api.dtos.CreateUserRequestDTO;
 import com.restocontrol.restcontrol_api.dtos.CreateUserResponseDTO;
 import com.restocontrol.restcontrol_api.dtos.GetUserByNameResponseDTO;
@@ -64,6 +65,16 @@ public class UserController {
     ) {
         logger.info("DELETE -> /users/" + id);
         this.userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/password/{id}")
+    public ResponseEntity<Void> changePassword(
+            @PathVariable UUID id,
+            @RequestBody ChangePasswordDTO changePasswordDto
+    ){
+        logger.info("PUT -> /users/password/"+id);
+        this.userService.changePassword(changePasswordDto, id);
         return ResponseEntity.noContent().build();
     }
 }
