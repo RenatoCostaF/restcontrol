@@ -5,6 +5,8 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.restocontrol.restcontrol_api.entities.User;
+import com.restocontrol.restcontrol_api.infra.exceptions.InvalidOrExpiredTokenException;
+import com.restocontrol.restcontrol_api.infra.exceptions.TokenGenerationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -29,20 +31,24 @@ public class TokenService {
 
             return token;
         } catch (JWTCreationException e){
-            throw new RuntimeException("Error while generating token", e);
+            throw new TokenGenerationException("Error while generating token", e);
         }
     }
 
     public String validateToken(String token){
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
-            return JWT.require(algorithm)
+            String subject = JWT.require(algorithm)
                     .withIssuer("restcontrol-api")
                     .build()
                     .verify(token)
                     .getSubject();
+            if (subject == null || subject.isBlank()) {
+                throw new InvalidOrExpiredTokenException();
+            }
+            return subject;
         } catch (JWTVerificationException e) {
-            return "";
+            throw new InvalidOrExpiredTokenException();
         }
     }
 

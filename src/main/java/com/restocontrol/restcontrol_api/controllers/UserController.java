@@ -1,11 +1,10 @@
 package com.restocontrol.restcontrol_api.controllers;
 
-import com.restocontrol.restcontrol_api.DTOs.ChangePasswordDTO;
+import com.restocontrol.restcontrol_api.dtos.ChangePasswordDTO;
 import com.restocontrol.restcontrol_api.dtos.CreateUserRequestDTO;
 import com.restocontrol.restcontrol_api.dtos.CreateUserResponseDTO;
 import com.restocontrol.restcontrol_api.dtos.GetUserByNameResponseDTO;
 import com.restocontrol.restcontrol_api.dtos.UpdateUserRequestDTO;
-import com.restocontrol.restcontrol_api.entities.User;
 import com.restocontrol.restcontrol_api.services.UserService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -44,7 +43,7 @@ public class UserController {
     public ResponseEntity<CreateUserResponseDTO> createUser(
             @Valid @RequestBody CreateUserRequestDTO user
     ) {
-        logger.info("POST -> /users");
+        logger.info("POST -> /user");
         var response = this.userService.createUser(user);
         return ResponseEntity.status(201).body(response);
     }

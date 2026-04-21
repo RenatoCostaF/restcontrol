@@ -1,14 +1,11 @@
 package com.restocontrol.restcontrol_api.services;
 
-import com.restocontrol.restcontrol_api.DTOs.ChangePasswordDTO;
+import com.restocontrol.restcontrol_api.dtos.ChangePasswordDTO;
 import com.restocontrol.restcontrol_api.dtos.CreateUserRequestDTO;
 import com.restocontrol.restcontrol_api.dtos.CreateUserResponseDTO;
 import com.restocontrol.restcontrol_api.dtos.GetUserByNameResponseDTO;
 import com.restocontrol.restcontrol_api.dtos.UpdateUserRequestDTO;
-import com.restocontrol.restcontrol_api.infra.exceptions.EmailAlreadyExistsException;
-import com.restocontrol.restcontrol_api.infra.exceptions.InvalidPasswordException;
-import com.restocontrol.restcontrol_api.infra.exceptions.LoginAlreadyExistsException;
-import com.restocontrol.restcontrol_api.infra.exceptions.UserNotFoundException;
+import com.restocontrol.restcontrol_api.infra.exceptions.*;
 import com.restocontrol.restcontrol_api.mappers.UserMapper;
 import com.restocontrol.restcontrol_api.repositories.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -33,6 +30,9 @@ public class UserService {
 
     public List<GetUserByNameResponseDTO> findByName(String name) {
         var users = this.userRepository.findByName(name);
+        if (users.isEmpty()) {
+            throw new UsersNotFoundByNameException(name);
+        }
         return userMapper.toGetUserByNameResponseDTO(users);
     }
 

@@ -3,10 +3,12 @@ package com.restocontrol.restcontrol_api.services;
 import com.restocontrol.restcontrol_api.dtos.AuthenticationDTO;
 import com.restocontrol.restcontrol_api.dtos.LoginResponseDTO;
 import com.restocontrol.restcontrol_api.entities.User;
+import com.restocontrol.restcontrol_api.infra.exceptions.AuthenticationFailedException;
 import com.restocontrol.restcontrol_api.infra.security.TokenService;
 import com.restocontrol.restcontrol_api.mappers.AuthorizationMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,11 +26,12 @@ public class AuthorizationService {
 
     public LoginResponseDTO login(AuthenticationDTO data) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
-        var auth = authenticationManager.authenticate(usernamePassword);
-        var token = tokenService.generateToken((User) auth.getPrincipal());
-
-        return authorizationMapper.toLoginResponseDTO(token);
+        try{
+            var auth = authenticationManager.authenticate(usernamePassword);
+            var token = tokenService.generateToken((User) auth.getPrincipal());
+            return authorizationMapper.toLoginResponseDTO(token);
+        } catch (AuthenticationException e) {
+            throw new AuthenticationFailedException();
+        }
     }
-
-
 }
