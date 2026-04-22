@@ -2,6 +2,7 @@ package com.restocontrol.restcontrol_api.entities;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.restocontrol.restcontrol_api.infra.exceptions.InvalidUserRoleException;
 
 import java.util.Arrays;
 
@@ -29,6 +30,6 @@ public enum UserRole {
         return Arrays.stream(UserRole.values())
                 .filter(role -> role.role.equalsIgnoreCase(value) || role.name().equalsIgnoreCase(value))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Ivalid role: " + value));
+                .orElseThrow(() -> new InvalidUserRoleException("Ivalid role: " + value));
     }
 }
