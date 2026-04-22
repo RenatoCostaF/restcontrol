@@ -3,6 +3,7 @@ package com.restocontrol.restcontrol_api.dtos;
 import com.restocontrol.restcontrol_api.entities.UserRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record CreateUserRequestDTO(
@@ -24,6 +25,6 @@ public record CreateUserRequestDTO(
         @NotBlank(message = "Address is required")
         String address,
 
-        @NotBlank(message = "Role is required")
+        @NotNull(message = "Role is required")
         UserRole role) {
 }

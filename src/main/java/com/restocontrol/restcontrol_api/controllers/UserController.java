@@ -67,12 +67,12 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/password/{id}")
+    @PutMapping("/change-password/{id}")
     public ResponseEntity<Void> changePassword(
             @PathVariable UUID id,
             @RequestBody ChangePasswordDTO changePasswordDto
     ){
-        logger.info("PUT -> /users/password/"+id);
+        logger.info("PUT -> /users/change-password/"+id);
         this.userService.changePassword(changePasswordDto, id);
         return ResponseEntity.noContent().build();
     }

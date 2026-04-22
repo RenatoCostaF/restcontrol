@@ -1,10 +1,6 @@
 package com.restocontrol.restcontrol_api.services;
 
-import com.restocontrol.restcontrol_api.dtos.ChangePasswordDTO;
-import com.restocontrol.restcontrol_api.dtos.CreateUserRequestDTO;
-import com.restocontrol.restcontrol_api.dtos.CreateUserResponseDTO;
-import com.restocontrol.restcontrol_api.dtos.GetUserByNameResponseDTO;
-import com.restocontrol.restcontrol_api.dtos.UpdateUserRequestDTO;
+import com.restocontrol.restcontrol_api.dtos.*;
 import com.restocontrol.restcontrol_api.infra.exceptions.*;
 import com.restocontrol.restcontrol_api.mappers.UserMapper;
 import com.restocontrol.restcontrol_api.repositories.UserRepository;
@@ -92,6 +88,7 @@ public class UserService {
 
     }
 
+    @Transactional
     public void deleteUser(UUID id) {
         if (!userRepository.existsById(id)) {
             throw new UserNotFoundException();
@@ -100,7 +97,8 @@ public class UserService {
         this.userRepository.deleteById(id);
     }
 
-    public void changePassword(ChangePasswordDTO changePasswordDto, UUID id){
+    @Transactional
+    public void changePassword(ChangePasswordDTO changePasswordDto, UUID id) {
         var user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
 
         if (changePasswordDto.password().length() < 6) {
