@@ -6,6 +6,9 @@ import com.restocontrol.restcontrol_api.dtos.CreateUserResponseDTO;
 import com.restocontrol.restcontrol_api.dtos.GetUserByNameResponseDTO;
 import com.restocontrol.restcontrol_api.dtos.UpdateUserRequestDTO;
 import com.restocontrol.restcontrol_api.services.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +19,8 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/v1/user")
+@Tag(name = "Users", description = "Controller para CRUD de usuários")
 public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -27,6 +31,13 @@ public class UserController {
         this.userService = userService;
     }
 
+    @Operation(
+            description = "Buscar usuário por nome",
+            summary = "Buscar usuário",
+            responses = {
+                    @ApiResponse(description = "Sucesso - Retorna os dados definidos em GetUserByNameResponseDTO", responseCode = "200")
+            }
+    )
     @GetMapping("/{name}")
     public ResponseEntity<List<GetUserByNameResponseDTO>> findByName(
             @PathVariable("name") String name
@@ -39,6 +50,13 @@ public class UserController {
         return ResponseEntity.notFound().build();
     }
 
+    @Operation(
+            description = "Criar novo usuário na base de dados. Realiza validação para confirmar login e email únicos",
+            summary = "Criar novo usuário",
+            responses = {
+                    @ApiResponse(description = "Sucesso - Retorna os dados definidos em CreateUserResponseDTO", responseCode = "201 - Created")
+            }
+    )
     @PostMapping
     public ResponseEntity<CreateUserResponseDTO> createUser(
             @Valid @RequestBody CreateUserRequestDTO user
@@ -48,6 +66,14 @@ public class UserController {
         return ResponseEntity.status(201).body(response);
     }
 
+
+    @Operation(
+            description = "Realizar atualização de dados gerais do usuário. Não realiza atualização de password",
+            summary = "Atualização de usuário",
+            responses = {
+                    @ApiResponse(description = "Sucesso", responseCode = "200")
+            }
+    )
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateUser(
             @PathVariable("id") UUID id,
@@ -58,6 +84,13 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @Operation(
+            description = "Remover usuário através do Id",
+            summary = "Remover usuário",
+            responses = {
+                    @ApiResponse(description = "Sucesso", responseCode = "204")
+            }
+    )
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(
             @PathVariable("id") UUID id
@@ -67,6 +100,13 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(
+            description = "Alterar senha do usuário definido pelo Id",
+            summary = "Alterar senha",
+            responses = {
+                    @ApiResponse(description = "Sucesso", responseCode = "200")
+            }
+    )
     @PutMapping("/change-password/{id}")
     public ResponseEntity<Void> changePassword(
             @PathVariable UUID id,
