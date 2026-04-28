@@ -41,6 +41,7 @@ public class User implements UserDetails {
     private String address;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private UserRole role;
 
     private LocalDateTime createdAt;
