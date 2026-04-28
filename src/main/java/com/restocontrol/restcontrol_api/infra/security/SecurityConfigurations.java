@@ -32,9 +32,10 @@ public class SecurityConfigurations {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/user").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/user/{name}").hasRole("DONO_RESTAURANTE")
-                        .requestMatchers(HttpMethod.DELETE, "/user/{id}").hasRole("DONO_RESTAURANTE")
+                        .requestMatchers(HttpMethod.POST, "/v1/user").permitAll()
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/v1/user/{name}").hasRole("DONO_RESTAURANTE")
+                        .requestMatchers(HttpMethod.DELETE, "/v1/user/{id}").hasRole("DONO_RESTAURANTE")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
