@@ -204,6 +204,41 @@
       "response": []
     },
     {
+      "name": "PUT User - Error Id not found",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "{{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\":\"masteradmin@acme2.com\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://{{domain}}/v1/user/99b391ae-27b0-4b84-b9a6-3270f5e11111",
+          "protocol": "http",
+          "host": [
+            "{{domain}}"
+          ],
+          "path": [
+            "v1",
+            "user",
+            "99b391ae-27b0-4b84-b9a6-3270f5e11111"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
       "name": "PUT Password",
       "request": {
         "method": "PUT",
