@@ -1,0 +1,347 @@
+{
+  "info": {
+    "_postman_id": "26b0068f-019b-41e3-9cc5-0db253bb6c35",
+    "name": "Tech-Challenge-Official SHARED",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "28960895"
+  },
+  "item": [
+    {
+      "name": "POST Auth",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"login\":\"masteradmin\",\r\n    \"password\":\"mastadm123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://{{domain}}/auth/login",
+          "protocol": "http",
+          "host": [
+            "{{domain}}"
+          ],
+          "path": [
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST User",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\":\"masteradmintest\",\r\n    \"email\":\"masteradmintest@testadmin.com\",\r\n    \"login\":\"masteradmintest\",\r\n    \"password\":\"mastadm123\",\r\n    \"address\":\"rua do master admin\",\r\n    \"role\":\"DONO_RESTAURANTE\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://{{domain}}/v1/user",
+          "protocol": "http",
+          "host": [
+            "{{domain}}"
+          ],
+          "path": [
+            "v1",
+            "user"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST User - Error Existing User",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\":\"masteradmin\",\r\n    \"email\":\"masteradmin@testadmin.com\",\r\n    \"login\":\"masteradmin\",\r\n    \"password\":\"mastadm123\",\r\n    \"address\":\"rua do master admin\",\r\n    \"role\":\"CLIENTE\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://{{domain}}/v1/user",
+          "protocol": "http",
+          "host": [
+            "{{domain}}"
+          ],
+          "path": [
+            "v1",
+            "user"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET User",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJyZXN0Y29udHJvbC1hcGkiLCJzdWIiOiJnYWJyaWVsZG9ub3Jlc3QiLCJleHAiOjE3NzcyNTIzNTZ9.Ux0mzYVtt7LZLQ50IXCRB8j_fTXgNk1YtrBn-Q4YFx4",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://{{domain}}/v1/user/gabriel",
+          "protocol": "http",
+          "host": [
+            "{{domain}}"
+          ],
+          "path": [
+            "v1",
+            "user",
+            "gabriel"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET User - Error - Not Found",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJyZXN0Y29udHJvbC1hcGkiLCJzdWIiOiJnYWJyaWVsZG9ub3Jlc3QiLCJleHAiOjE3NzcyNTIzNTZ9.Ux0mzYVtt7LZLQ50IXCRB8j_fTXgNk1YtrBn-Q4YFx4",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://{{domain}}/v1/user/jeronimo",
+          "protocol": "http",
+          "host": [
+            "{{domain}}"
+          ],
+          "path": [
+            "v1",
+            "user",
+            "jeronimo"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "DELETE User",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJyZXN0Y29udHJvbC1hcGkiLCJzdWIiOiJnYWJyaWVsZG9ub3Jlc3QiLCJleHAiOjE3NzcyNTIzNTZ9.Ux0mzYVtt7LZLQ50IXCRB8j_fTXgNk1YtrBn-Q4YFx4",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://{{domain}}/v1/user/354ed4c3-b2cc-4244-8bc3-67a230f41288",
+          "protocol": "http",
+          "host": [
+            "{{domain}}"
+          ],
+          "path": [
+            "v1",
+            "user",
+            "354ed4c3-b2cc-4244-8bc3-67a230f41288"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "PUT User",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "{{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\":\"masteradmin@acme2.com\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://{{domain}}/v1/user/99b391ae-27b0-4b84-b9a6-3270f5e11a58",
+          "protocol": "http",
+          "host": [
+            "{{domain}}"
+          ],
+          "path": [
+            "v1",
+            "user",
+            "99b391ae-27b0-4b84-b9a6-3270f5e11a58"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "PUT User - Error Id not found",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "{{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\":\"masteradmin@acme2.com\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://{{domain}}/v1/user/99b391ae-27b0-4b84-b9a6-3270f5e11111",
+          "protocol": "http",
+          "host": [
+            "{{domain}}"
+          ],
+          "path": [
+            "v1",
+            "user",
+            "99b391ae-27b0-4b84-b9a6-3270f5e11111"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "PUT Password",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "{{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"password\":\"testpassword1\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://{{domain}}/v1/user/change-password/32034936-55c8-4517-873b-c8736bcb5ca2",
+          "protocol": "http",
+          "host": [
+            "{{domain}}"
+          ],
+          "path": [
+            "v1",
+            "user",
+            "change-password",
+            "32034936-55c8-4517-873b-c8736bcb5ca2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "PUT Password - Error - Id not found",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "{{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"password\":\"testpassword1\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://{{domain}}/v1/user/change-password/99b391ae-27b0-4b84-b9a6-3270f5e11a111",
+          "protocol": "http",
+          "host": [
+            "{{domain}}"
+          ],
+          "path": [
+            "v1",
+            "user",
+            "change-password",
+            "99b391ae-27b0-4b84-b9a6-3270f5e11a111"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "domain",
+      "value": "localhost:8081"
+    },
+    {
+      "key": "token",
+      "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJyZXN0Y29udHJvbC1hcGkiLCJzdWIiOiJtYXN0ZXJhZG1pbiIsImV4cCI6MTc3NzQ5NjE4OH0.RHvryMK2XnwjqXtpQyiDXyIyAtCHytk8m60XKUc3H3U",
+      "type": "string"
+    }
+  ]
+}
