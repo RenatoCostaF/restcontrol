@@ -41,7 +41,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "/* {\r\n    \"name\":\"gabriel\",\r\n    \"email\":\"gabriel@testdondorest.com\",\r\n    \"login\":\"gabrieldonorest\",\r\n    \"password\":\"12345678\",\r\n    \"address\":\"rua teste\",\r\n    \"role\":\"DONO_RESTAURANTE\"\r\n} */\r\n{\r\n    \"name\":\"gabriel\",\r\n    \"email\":\"gabriel@testcliente.com\",\r\n    \"login\":\"gabrielcliente\",\r\n    \"password\":\"12345678\",\r\n    \"address\":\"rua teste\",\r\n    \"role\":\"CLIENTE\"\r\n}",
+          "raw": "{\r\n    \"name\":\"masteradmintest\",\r\n    \"email\":\"masteradmintest@testadmin.com\",\r\n    \"login\":\"masteradmintest\",\r\n    \"password\":\"mastadm123\",\r\n    \"address\":\"rua do master admin\",\r\n    \"role\":\"DONO_RESTAURANTE\"\r\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -259,7 +259,7 @@
           }
         },
         "url": {
-          "raw": "http://{{domain}}/v1/user/99b391ae-27b0-4b84-b9a6-3270f5e11a58",
+          "raw": "http://{{domain}}/v1/user/change-password/32034936-55c8-4517-873b-c8736bcb5ca2",
           "protocol": "http",
           "host": [
             "{{domain}}"
@@ -267,7 +267,8 @@
           "path": [
             "v1",
             "user",
-            "99b391ae-27b0-4b84-b9a6-3270f5e11a58"
+            "change-password",
+            "32034936-55c8-4517-873b-c8736bcb5ca2"
           ]
         }
       },
@@ -294,7 +295,7 @@
           }
         },
         "url": {
-          "raw": "http://{{domain}}/v1/user/99b391ae-27b0-4b84-b9a6-3270f5e11a111",
+          "raw": "http://{{domain}}/v1/user/change-password/99b391ae-27b0-4b84-b9a6-3270f5e11a111",
           "protocol": "http",
           "host": [
             "{{domain}}"
@@ -302,6 +303,7 @@
           "path": [
             "v1",
             "user",
+            "change-password",
             "99b391ae-27b0-4b84-b9a6-3270f5e11a111"
           ]
         }
