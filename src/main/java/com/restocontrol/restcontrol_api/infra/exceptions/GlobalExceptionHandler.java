@@ -2,12 +2,17 @@ package com.restocontrol.restcontrol_api.infra.exceptions;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.ArrayList;
@@ -19,15 +24,6 @@ import java.util.Map;
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
-
-    @ExceptionHandler(InvalidEmailException.class)
-    public ProblemDetail handleInvalidEmail(InvalidEmailException e) {
-        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
-        problemDetail.setTitle("Invalid Email");
-        problemDetail.setDetail("The provided email does not match the required format: name@domain");
-
-        return problemDetail;
-    }
 
     @ExceptionHandler(EmailAlreadyExistsException.class)
     public ProblemDetail handleEmailAlreadyExists(EmailAlreadyExistsException e) {
@@ -61,15 +57,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return problemDetail;
     }
 
-    @ExceptionHandler(IncorrectPasswordException.class)
-    public ProblemDetail handleIncorrectPassword(IncorrectPasswordException e) {
-        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.UNAUTHORIZED);
-        problemDetail.setTitle("Incorrect Password");
-        problemDetail.setDetail("The provided password does not match the registered email");
-
-        return problemDetail;
-    }
-
     @ExceptionHandler(InvalidPasswordException.class)
     public ProblemDetail handleInvalidPassword(InvalidPasswordException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
@@ -99,7 +86,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(InvalidOrExpiredTokenException.class)
     public ProblemDetail handleInvalidOrExpiredToken(InvalidOrExpiredTokenException e) {
-        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.UNAUTHORIZED);
         problemDetail.setTitle("Invalid or Expired Token");
         problemDetail.setDetail(e.getMessage());
 
@@ -116,8 +103,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return problemDetail;
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ProblemDetail handleMethodArgumentNotValid(MethodArgumentNotValidException e) {
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException e,
+            HttpHeaders headers,
+            HttpStatusCode status,
+            WebRequest request
+    ) {
         Map<String, List<String>> fieldErrors = new LinkedHashMap<>();
 
         e.getBindingResult()
@@ -128,17 +120,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                     fieldErrors.computeIfAbsent(fieldName, key -> new ArrayList<>()).add(errorMessage);
                 });
 
-        return handleDtoValidation(new DtoValidationException(fieldErrors));
-    }
-
-    @ExceptionHandler(DtoValidationException.class)
-    public ProblemDetail handleDtoValidation(DtoValidationException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
         problemDetail.setTitle("DTO Validation Failed");
-        problemDetail.setDetail(e.getMessage());
-        problemDetail.setProperty("errors", e.getFieldErrors());
+        problemDetail.setDetail("One or more DTO fields are invalid.");
+        problemDetail.setProperty("errors", fieldErrors);
 
-        return problemDetail;
+        return ResponseEntity.badRequest().body(problemDetail);
     }
 
     @ExceptionHandler(InvalidUserRoleException.class)
@@ -150,13 +137,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return problemDetail;
     }
 
-    @ExceptionHandler(InternalServerException.class)
-    public ProblemDetail handleInternalServerError(InternalServerException e) {
-        log.error("Internal server error", e);
-        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-        problemDetail.setTitle("Internal Server Error");
-        String detail = e.getMessage();
-        problemDetail.setDetail(detail != null && !detail.isBlank() ? detail : "An unexpected error ocurred.");
+    @ExceptionHandler(AccessDeniedException.class)
+    public ProblemDetail handleAccessDenied(AccessDeniedException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.FORBIDDEN);
+        problemDetail.setTitle("Access Denied");
+        problemDetail.setDetail(e.getMessage());
 
         return problemDetail;
     }

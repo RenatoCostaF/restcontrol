@@ -20,16 +20,16 @@ public enum UserRole {
     public String getRole() {
         return role;
     }
-    
+
     @JsonCreator
     public static UserRole fromValue(String value) {
         if (value == null) {
             return null;
         }
-        
+
         return Arrays.stream(UserRole.values())
                 .filter(role -> role.role.equalsIgnoreCase(value) || role.name().equalsIgnoreCase(value))
                 .findFirst()
-                .orElseThrow(() -> new InvalidUserRoleException("Ivalid role: " + value));
+                .orElseThrow(() -> new InvalidUserRoleException(value));
     }
 }
