@@ -1,10 +1,6 @@
 package com.restocontrol.restcontrol_api.controllers;
 
-import com.restocontrol.restcontrol_api.dtos.ChangePasswordDTO;
-import com.restocontrol.restcontrol_api.dtos.CreateUserRequestDTO;
-import com.restocontrol.restcontrol_api.dtos.CreateUserResponseDTO;
-import com.restocontrol.restcontrol_api.dtos.GetUserByNameResponseDTO;
-import com.restocontrol.restcontrol_api.dtos.UpdateUserRequestDTO;
+import com.restocontrol.restcontrol_api.dtos.*;
 import com.restocontrol.restcontrol_api.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -42,12 +38,10 @@ public class UserController {
     public ResponseEntity<List<GetUserByNameResponseDTO>> findByName(
             @PathVariable("name") String name
     ) {
-        logger.info("GET -> /user" + name);
+        logger.info("Recebida requisição para buscar usuários pelo nome: {}", name);
         var users = this.userService.findByName(name);
-        if (users.size() > 0) {
-            return ResponseEntity.ok(users);
-        }
-        return ResponseEntity.notFound().build();
+        logger.info("Busca por nome concluída com {} usuário(s) encontrado(s) para: {}", users.size(), name);
+        return ResponseEntity.ok(users);
     }
 
     @Operation(
@@ -61,8 +55,9 @@ public class UserController {
     public ResponseEntity<CreateUserResponseDTO> createUser(
             @Valid @RequestBody CreateUserRequestDTO user
     ) {
-        logger.info("POST -> /user");
+        logger.info("Recebida requisição para criar usuário com login: {}", user.login());
         var response = this.userService.createUser(user);
+        logger.info("Usuário criado com sucesso. Id: {}", response.id());
         return ResponseEntity.status(201).body(response);
     }
 
@@ -79,8 +74,9 @@ public class UserController {
             @PathVariable("id") UUID id,
             @RequestBody UpdateUserRequestDTO userDto
     ) {
-        logger.info("PUT -> /users/" + id);
+        logger.info("Recebida requisição para atualizar o usuário de id: {}", id);
         this.userService.updateUser(userDto, id);
+        logger.info("Atualização do usuário concluída com sucesso. Id: {}", id);
         return ResponseEntity.ok().build();
     }
 
@@ -95,8 +91,9 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(
             @PathVariable("id") UUID id
     ) {
-        logger.info("DELETE -> /users/" + id);
+        logger.info("Recebida requisição para remover o usuário de id: {}", id);
         this.userService.deleteUser(id);
+        logger.info("Usuário removido com sucesso. Id: {}", id);
         return ResponseEntity.noContent().build();
     }
 
@@ -104,16 +101,17 @@ public class UserController {
             description = "Alterar senha do usuário definido pelo Id",
             summary = "Alterar senha",
             responses = {
-                    @ApiResponse(description = "Sucesso", responseCode = "200")
+                    @ApiResponse(description = "Sucesso", responseCode = "204")
             }
     )
     @PutMapping("/change-password/{id}")
     public ResponseEntity<Void> changePassword(
             @PathVariable UUID id,
             @RequestBody ChangePasswordDTO changePasswordDto
-    ){
-        logger.info("PUT -> /users/change-password/"+id);
+    ) {
+        logger.info("Recebida requisição para alterar a senha do usuário de id: {}", id);
         this.userService.changePassword(changePasswordDto, id);
+        logger.info("Senha do usuário alterada com sucesso. Id: {}", id);
         return ResponseEntity.noContent().build();
     }
 }

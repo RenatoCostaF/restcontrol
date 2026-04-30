@@ -4,7 +4,7 @@ import com.restocontrol.restcontrol_api.dtos.LoginResponseDTO;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AuthorizationMapper {
+public class AuthMapper {
 
     public LoginResponseDTO toLoginResponseDTO(String token) {
         return new LoginResponseDTO(token);
