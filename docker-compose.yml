@@ -31,6 +31,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/restcontrol
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
+      JWT_SECRET: yiv74CoYteCOVf9MvPqMc4pEHn2EiLAuL8TT98/wr9A=
 
 volumes:
   postgres_data:

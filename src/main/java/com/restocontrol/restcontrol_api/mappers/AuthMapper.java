@@ -1,12 +1,10 @@
 package com.restocontrol.restcontrol_api.mappers;
 
 import com.restocontrol.restcontrol_api.dtos.LoginResponseDTO;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
 
-@Component
-public class AuthMapper {
+@Mapper(componentModel = "spring")
+public abstract class AuthMapper {
 
-    public LoginResponseDTO toLoginResponseDTO(String token) {
-        return new LoginResponseDTO(token);
-    }
+    public abstract LoginResponseDTO toLoginResponseDTO(String token);
 }
