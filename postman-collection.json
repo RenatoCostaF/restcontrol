@@ -10,7 +10,13 @@
       "name": "POST Auth",
       "request": {
         "method": "POST",
-        "header": [],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
         "body": {
           "mode": "raw",
           "raw": "{\r\n    \"login\":\"masteradmin\",\r\n    \"password\":\"mastadm123\"\r\n}",
@@ -21,24 +27,48 @@
           }
         },
         "url": {
-          "raw": "http://{{domain}}/auth/login",
+          "raw": "http://{{domain}}/v1/auth/login",
           "protocol": "http",
           "host": [
             "{{domain}}"
           ],
           "path": [
+            "v1",
             "auth",
             "login"
           ]
         }
       },
-      "response": []
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "exec": [
+              "pm.test(\"Login retornou token\", function () {",
+              "    pm.response.to.have.status(200);",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.token).to.be.a(\"string\").and.not.empty;",
+              "    pm.collectionVariables.set(\"token\", \"Bearer \" + jsonData.token);",
+              "});"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "POST User",
       "request": {
         "method": "POST",
-        "header": [],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
         "body": {
           "mode": "raw",
           "raw": "{\r\n    \"name\":\"masteradmintest\",\r\n    \"email\":\"masteradmintest@testadmin.com\",\r\n    \"login\":\"masteradmintest\",\r\n    \"password\":\"mastadm123\",\r\n    \"address\":\"rua do master admin\",\r\n    \"role\":\"DONO_RESTAURANTE\"\r\n}",
@@ -66,7 +96,13 @@
       "name": "POST User - Error Existing User",
       "request": {
         "method": "POST",
-        "header": [],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
         "body": {
           "mode": "raw",
           "raw": "{\r\n    \"name\":\"masteradmin\",\r\n    \"email\":\"masteradmin@testadmin.com\",\r\n    \"login\":\"masteradmin\",\r\n    \"password\":\"mastadm123\",\r\n    \"address\":\"rua do master admin\",\r\n    \"role\":\"CLIENTE\"\r\n}",
@@ -97,7 +133,7 @@
         "header": [
           {
             "key": "Authorization",
-            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJyZXN0Y29udHJvbC1hcGkiLCJzdWIiOiJnYWJyaWVsZG9ub3Jlc3QiLCJleHAiOjE3NzcyNTIzNTZ9.Ux0mzYVtt7LZLQ50IXCRB8j_fTXgNk1YtrBn-Q4YFx4",
+            "value": "{{token}}",
             "type": "text"
           }
         ],
@@ -123,7 +159,7 @@
         "header": [
           {
             "key": "Authorization",
-            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJyZXN0Y29udHJvbC1hcGkiLCJzdWIiOiJnYWJyaWVsZG9ub3Jlc3QiLCJleHAiOjE3NzcyNTIzNTZ9.Ux0mzYVtt7LZLQ50IXCRB8j_fTXgNk1YtrBn-Q4YFx4",
+            "value": "{{token}}",
             "type": "text"
           }
         ],
@@ -149,7 +185,7 @@
         "header": [
           {
             "key": "Authorization",
-            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJyZXN0Y29udHJvbC1hcGkiLCJzdWIiOiJnYWJyaWVsZG9ub3Jlc3QiLCJleHAiOjE3NzcyNTIzNTZ9.Ux0mzYVtt7LZLQ50IXCRB8j_fTXgNk1YtrBn-Q4YFx4",
+            "value": "{{token}}",
             "type": "text"
           }
         ],
@@ -176,6 +212,11 @@
           {
             "key": "Authorization",
             "value": "{{token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
             "type": "text"
           }
         ],
@@ -212,6 +253,11 @@
             "key": "Authorization",
             "value": "{{token}}",
             "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
           }
         ],
         "body": {
@@ -246,6 +292,11 @@
           {
             "key": "Authorization",
             "value": "{{token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
             "type": "text"
           }
         ],
@@ -282,6 +333,11 @@
           {
             "key": "Authorization",
             "value": "{{token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
             "type": "text"
           }
         ],
@@ -336,11 +392,11 @@
   "variable": [
     {
       "key": "domain",
-      "value": "localhost:8081"
+      "value": "localhost:8080"
     },
     {
       "key": "token",
-      "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJyZXN0Y29udHJvbC1hcGkiLCJzdWIiOiJtYXN0ZXJhZG1pbiIsImV4cCI6MTc3NzQ5NjE4OH0.RHvryMK2XnwjqXtpQyiDXyIyAtCHytk8m60XKUc3H3U",
+      "value": "",
       "type": "string"
     }
   ]

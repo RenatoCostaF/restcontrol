@@ -3,11 +3,20 @@ package com.restocontrol.restcontrol_api.controllers;
 import com.restocontrol.restcontrol_api.dtos.*;
 import com.restocontrol.restcontrol_api.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,14 +37,68 @@ public class UserController {
     }
 
     @Operation(
-            description = "Buscar usuário por nome",
-            summary = "Buscar usuário",
-            responses = {
-                    @ApiResponse(description = "Sucesso - Retorna os dados definidos em GetUserByNameResponseDTO", responseCode = "200")
-            }
+            summary = "Buscar usuários por nome",
+            description = "Retorna os usuários encontrados pelo nome informado. Endpoint restrito a usuários com papel DONO_RESTAURANTE.",
+            security = @SecurityRequirement(name = "bearerAuth")
     )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Usuários encontrados com sucesso",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            array = @ArraySchema(schema = @Schema(implementation = GetUserByNameResponseDTO.class))
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Token ausente, inválido ou expirado",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                            schema = @Schema(implementation = ProblemDetail.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Usuário autenticado sem permissão para consultar usuários",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                            schema = @Schema(implementation = ProblemDetail.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Nenhum usuário encontrado para o nome informado",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                            schema = @Schema(implementation = ProblemDetail.class),
+                            examples = @ExampleObject(
+                                    name = "users-not-found",
+                                    value = """
+                                            {
+                                              "type": "about:blank",
+                                              "title": "Users Not Found",
+                                              "status": 404,
+                                              "detail": "No users were found for requested name.",
+                                              "instance": "/v1/user/joao",
+                                              "name": "joao"
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Erro inesperado ao buscar usuários",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                            schema = @Schema(implementation = ProblemDetail.class)
+                    )
+            )
+    })
     @GetMapping("/{name}")
     public ResponseEntity<List<GetUserByNameResponseDTO>> findByName(
+            @Parameter(description = "Nome utilizado na busca", example = "Joao")
             @PathVariable("name") String name
     ) {
         logger.info("Recebida requisição para buscar usuários pelo nome: {}", name);
@@ -45,12 +108,44 @@ public class UserController {
     }
 
     @Operation(
-            description = "Criar novo usuário na base de dados. Realiza validação para confirmar login e email únicos",
             summary = "Criar novo usuário",
-            responses = {
-                    @ApiResponse(description = "Sucesso - Retorna os dados definidos em CreateUserResponseDTO", responseCode = "201 - Created")
-            }
+            description = "Cria um novo usuário e valida unicidade de e-mail e login. Endpoint público.",
+            security = {}
     )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "Usuário criado com sucesso",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = CreateUserResponseDTO.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Payload inválido, senha inválida ou papel de usuário inválido",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                            schema = @Schema(implementation = ProblemDetail.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "E-mail ou login já cadastrado",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                            schema = @Schema(implementation = ProblemDetail.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Erro inesperado ao criar usuário",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                            schema = @Schema(implementation = ProblemDetail.class)
+                    )
+            )
+    })
     @PostMapping
     public ResponseEntity<CreateUserResponseDTO> createUser(
             @Valid @RequestBody CreateUserRequestDTO user
@@ -63,14 +158,56 @@ public class UserController {
 
 
     @Operation(
-            description = "Realizar atualização de dados gerais do usuário. Não realiza atualização de password",
-            summary = "Atualização de usuário",
-            responses = {
-                    @ApiResponse(description = "Sucesso", responseCode = "200")
-            }
+            summary = "Atualizar usuário",
+            description = "Atualiza nome, e-mail, login e endereço do usuário informado. Não altera senha.",
+            security = @SecurityRequirement(name = "bearerAuth")
     )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso"),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Token ausente, inválido ou expirado",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                            schema = @Schema(implementation = ProblemDetail.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Usuário autenticado sem permissão para atualizar este cadastro",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                            schema = @Schema(implementation = ProblemDetail.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Usuário não encontrado",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                            schema = @Schema(implementation = ProblemDetail.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "E-mail ou login já cadastrado para outro usuário",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                            schema = @Schema(implementation = ProblemDetail.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Erro inesperado ao atualizar usuário",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                            schema = @Schema(implementation = ProblemDetail.class)
+                    )
+            )
+    })
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateUser(
+            @Parameter(description = "Identificador do usuário", example = "8b0c5bb0-9614-4d0d-8cb8-2046714e1f5f")
             @PathVariable("id") UUID id,
             @RequestBody UpdateUserRequestDTO userDto
     ) {
@@ -81,14 +218,48 @@ public class UserController {
     }
 
     @Operation(
-            description = "Remover usuário através do Id",
             summary = "Remover usuário",
-            responses = {
-                    @ApiResponse(description = "Sucesso", responseCode = "204")
-            }
+            description = "Remove o usuário pelo ID. Endpoint restrito a usuários com papel DONO_RESTAURANTE.",
+            security = @SecurityRequirement(name = "bearerAuth")
     )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Usuário removido com sucesso"),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Token ausente, inválido ou expirado",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                            schema = @Schema(implementation = ProblemDetail.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Usuário autenticado sem permissão para remover usuários",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                            schema = @Schema(implementation = ProblemDetail.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Usuário não encontrado",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                            schema = @Schema(implementation = ProblemDetail.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Erro inesperado ao remover usuário",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                            schema = @Schema(implementation = ProblemDetail.class)
+                    )
+            )
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(
+            @Parameter(description = "Identificador do usuário", example = "8b0c5bb0-9614-4d0d-8cb8-2046714e1f5f")
             @PathVariable("id") UUID id
     ) {
         logger.info("Recebida requisição para remover o usuário de id: {}", id);
@@ -98,16 +269,58 @@ public class UserController {
     }
 
     @Operation(
-            description = "Alterar senha do usuário definido pelo Id",
-            summary = "Alterar senha",
-            responses = {
-                    @ApiResponse(description = "Sucesso", responseCode = "204")
-            }
+            summary = "Alterar senha do usuário",
+            description = "Altera a senha do usuário informado. Permitido para o próprio usuário autenticado ou para usuários com papel DONO_RESTAURANTE.",
+            security = @SecurityRequirement(name = "bearerAuth")
     )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Senha alterada com sucesso"),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Payload inválido ou senha fora da regra mínima",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                            schema = @Schema(implementation = ProblemDetail.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Token ausente, inválido ou expirado",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                            schema = @Schema(implementation = ProblemDetail.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Usuário autenticado sem permissão para alterar a senha deste cadastro",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                            schema = @Schema(implementation = ProblemDetail.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Usuário não encontrado",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                            schema = @Schema(implementation = ProblemDetail.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Erro inesperado ao alterar senha",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                            schema = @Schema(implementation = ProblemDetail.class)
+                    )
+            )
+    })
     @PutMapping("/change-password/{id}")
     public ResponseEntity<Void> changePassword(
+            @Parameter(description = "Identificador do usuário", example = "8b0c5bb0-9614-4d0d-8cb8-2046714e1f5f")
             @PathVariable UUID id,
-            @RequestBody ChangePasswordDTO changePasswordDto
+            @Valid @RequestBody ChangePasswordDTO changePasswordDto
     ) {
         logger.info("Recebida requisição para alterar a senha do usuário de id: {}", id);
         this.userService.changePassword(changePasswordDto, id);
