@@ -71,7 +71,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"name\":\"masteradmintest\",\r\n    \"email\":\"masteradmintest@testadmin.com\",\r\n    \"login\":\"masteradmintest\",\r\n    \"password\":\"mastadm123\",\r\n    \"address\":\"rua do master admin\",\r\n    \"role\":\"DONO_RESTAURANTE\"\r\n}",
+          "raw": "{\r\n    \"name\":\"NovoUsuarioTeste\",\r\n    \"email\":\"novousuario@example.com\",\r\n    \"login\":\"novousuario\",\r\n    \"password\":\"senha123\",\r\n    \"address\":\"Rua do Novo Usuario, 300\",\r\n    \"role\":\"CLIENTE\"\r\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -105,7 +105,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"name\":\"masteradmin\",\r\n    \"email\":\"masteradmin@testadmin.com\",\r\n    \"login\":\"masteradmin\",\r\n    \"password\":\"mastadm123\",\r\n    \"address\":\"rua do master admin\",\r\n    \"role\":\"CLIENTE\"\r\n}",
+          "raw": "{\r\n    \"name\":\"MasterAdmin\",\r\n    \"email\":\"masteradmin@testadmin.com\",\r\n    \"login\":\"masteradmin\",\r\n    \"password\":\"mastadm123\",\r\n    \"address\":\"Rua do Master Admin, 100\",\r\n    \"role\":\"DONO_RESTAURANTE\"\r\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -138,7 +138,7 @@
           }
         ],
         "url": {
-          "raw": "http://{{domain}}/v1/user/gabriel",
+          "raw": "http://{{domain}}/v1/user/ClienteSeed",
           "protocol": "http",
           "host": [
             "{{domain}}"
@@ -146,7 +146,7 @@
           "path": [
             "v1",
             "user",
-            "gabriel"
+            "ClienteSeed"
           ]
         }
       },
@@ -190,7 +190,7 @@
           }
         ],
         "url": {
-          "raw": "http://{{domain}}/v1/user/354ed4c3-b2cc-4244-8bc3-67a230f41288",
+          "raw": "http://{{domain}}/v1/user/22222222-2222-2222-2222-222222222222",
           "protocol": "http",
           "host": [
             "{{domain}}"
@@ -198,7 +198,7 @@
           "path": [
             "v1",
             "user",
-            "354ed4c3-b2cc-4244-8bc3-67a230f41288"
+            "22222222-2222-2222-2222-222222222222"
           ]
         }
       },
@@ -222,7 +222,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"email\":\"masteradmin@acme2.com\"\r\n}",
+          "raw": "{\r\n    \"email\":\"clienteseed+updated@testadmin.com\",\r\n    \"address\":\"Rua do Cliente Seed, 201\"\r\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -230,7 +230,7 @@
           }
         },
         "url": {
-          "raw": "http://{{domain}}/v1/user/99b391ae-27b0-4b84-b9a6-3270f5e11a58",
+          "raw": "http://{{domain}}/v1/user/22222222-2222-2222-2222-222222222222",
           "protocol": "http",
           "host": [
             "{{domain}}"
@@ -238,7 +238,7 @@
           "path": [
             "v1",
             "user",
-            "99b391ae-27b0-4b84-b9a6-3270f5e11a58"
+            "22222222-2222-2222-2222-222222222222"
           ]
         }
       },
@@ -310,7 +310,7 @@
           }
         },
         "url": {
-          "raw": "http://{{domain}}/v1/user/change-password/32034936-55c8-4517-873b-c8736bcb5ca2",
+          "raw": "http://{{domain}}/v1/user/change-password/22222222-2222-2222-2222-222222222222",
           "protocol": "http",
           "host": [
             "{{domain}}"
@@ -319,7 +319,7 @@
             "v1",
             "user",
             "change-password",
-            "32034936-55c8-4517-873b-c8736bcb5ca2"
+            "22222222-2222-2222-2222-222222222222"
           ]
         }
       },

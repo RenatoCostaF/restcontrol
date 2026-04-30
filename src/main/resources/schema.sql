@@ -6,6 +6,6 @@ CREATE TABLE IF NOT EXISTS users (
     password VARCHAR(255) NOT NULL,
     address VARCHAR(255) NOT NULL,
     role VARCHAR(255) NOT NULL CHECK (role IN ('DONO_RESTAURANTE', 'CLIENTE')),
-    created_at TIMESTAMP
+    created_at TIMESTAMP,
     updated_at TIMESTAMP
 );
